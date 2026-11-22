@@ -17,7 +17,6 @@
 set -euo pipefail
 
 VERSION="1.2.0"
-
 # ---------------------------------------------------------------------
 # Defaults — override on the command line or in the config file below.
 # ---------------------------------------------------------------------
@@ -85,7 +84,6 @@ OPTIONS
         --dry-run         Show the commands without running them.
     -h, --help            Show this help.
     -V, --version         Show the version.
-
 CONFIG FILE
     Everything above can be preset in $CONFIG_FILE, so a
     setup you use often becomes a bare 'sudo clone-vm.sh':
@@ -186,7 +184,6 @@ while [ $# -gt 0 ]; do
         *)             die "unknown option '$1' (try --help)" ;;
     esac
 done
-
 # --- Preflight checks -------------------------------------------------
 
 [ "$(id -u)" -eq 0 ] || die "run this script as root: sudo $0 ..."
@@ -274,7 +271,6 @@ fi
 
 info "Cloning '$TEMPLATE' into '$CLONE_NAME'"
 run virt-clone --original "$TEMPLATE" --name "$CLONE_NAME" --auto-clone
-
 # --- 2. Reset the clone's identity -----------------------------------
 
 if [ "$DO_SYSPREP" -eq 1 ]; then
@@ -369,10 +365,4 @@ if [ "$DO_START" -eq 1 ] && [ "$DRY_RUN" -eq 0 ]; then
         echo "First-boot commands log inside the guest to:"
         echo "    /var/log/virt-sysprep-firstboot.log"
     fi
-fi
-if [ -n "$X" ]; then
-    echo "a"
-    case "$1" in
-        -t) shift ;;
-    esac
 fi
