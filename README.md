@@ -96,6 +96,7 @@ sudo ./clone-vm.sh -t ubuntu-base -p node \
   -d '/var/lib/glpi-agent/*' \
   -d '/var/lib/zabbix/*'
 ```
+
 ## Recipes
 
 Every lab needs something slightly different once the clone is up: an
