@@ -2,6 +2,8 @@
 
 Clone a KVM/QEMU virtual machine and give the copy its own identity.
 
+![clone-vm.sh previewing a clone with --dry-run](docs/dry-run.svg)
+
 ## What it is for
 
 Anywhere you set one guest up properly and then want several of it.
