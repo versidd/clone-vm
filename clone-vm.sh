@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-VERSION="1.2.1"
+VERSION="1.2.2"
 
 # ---------------------------------------------------------------------
 # Defaults — override on the command line or in the config file below.
@@ -358,6 +358,10 @@ fi
 # --- Done -------------------------------------------------------------
 
 echo
+if [ "$DRY_RUN" -eq 1 ]; then
+    echo "Dry run finished: nothing was changed."
+    exit 0
+fi
 echo "Done. '$CLONE_NAME' is ready."
 if [ "$DO_START" -eq 1 ] && [ "$DRY_RUN" -eq 0 ]; then
     echo
