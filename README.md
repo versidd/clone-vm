@@ -2,6 +2,31 @@
 
 Clone a KVM/QEMU virtual machine and give the copy its own identity.
 
+## What it is for
+
+Anywhere you set one guest up properly and then want several of it.
+
+- **General use — a template and its copies.** Prepare one VM the way you like
+  it, with your packages, users and SSH keys, then stamp out copies that each
+  boot as a machine of their own. Nothing to configure: a template name and a
+  clone name is the whole command.
+- **Lab and test fleets.** `-p client` numbers the clones `client1`,
+  `client2`, and so on, taking the first free number, so another machine is one
+  command away.
+- **Fleets that report to a server.** Inventory and monitoring agents — GLPI,
+  OCS Inventory, Zabbix — keep an identifier on disk. Clone them as they are
+  and the whole fleet shows up as a single machine. `-d` wipes that state, and
+  `-c` runs whatever registration the agent needs on first boot. See
+  [Recipes](#recipes).
+- **A single named server.** `-n web-02` plus a few `-c` commands: a static
+  address, a patched config file, a service enabled, all applied the first time
+  it boots.
+
+It does not replace Ansible, Terraform or cloud-init. It is the step before
+those: getting a usable, distinct machine onto the network.
+
+## The problem it solves
+
 `virt-clone` copies the disk byte for byte, including `/etc/machine-id` and the
 SSH host keys. Two clones of the same template are then indistinguishable on the
 network:
