@@ -1,8 +1,22 @@
 #!/usr/bin/env bash
+#
+# clone-vm.sh — Clone a KVM/QEMU virtual machine and reset its identity.
+#
+# Cloning a VM with virt-clone alone copies /etc/machine-id and the SSH
+# host keys. Two clones then look like the same machine: DHCP hands them
+# the same lease, SSH warns about changed host keys, and inventory agents
+# report under one identity. This script runs virt-sysprep after the
+# clone so every copy starts with its own identity and hostname.
+#
+# Requires: virt-clone (virtinst), virt-sysprep (libguestfs-tools), root.
+# The template VM must be SHUT OFF before cloning.
+#
+# License: MIT
+#
 
 set -euo pipefail
 
-VERSION="1.2.0"
+VERSION="1.2.1"
 
 # ---------------------------------------------------------------------
 # Defaults — override on the command line or in the config file below.
@@ -22,6 +36,9 @@ KEEP_USER_KEYS=0   # keep ~/.ssh (authorized_keys) inside the clone
 REGEN_HOST_KEYS=1  # regenerate SSH host keys on first boot
 EXTRA_DELETE=()    # extra paths to wipe inside the clone
 FIRSTBOOT_COMMANDS=()  # commands to run inside the clone on first boot
+
+CLI_NAME=0         # set when -n comes from the command line
+CLI_PREFIX=0       # set when -p comes from the command line
 
 # ---------------------------------------------------------------------
 
@@ -156,8 +173,8 @@ fi
 while [ $# -gt 0 ]; do
     case "$1" in
         -t|--template) TEMPLATE="${2:-}"; shift 2 ;;
-        -n|--name)     CLONE_NAME="${2:-}"; shift 2 ;;
-        -p|--prefix)   PREFIX="${2:-}"; shift 2 ;;
+        -n|--name)     CLONE_NAME="${2:-}"; CLI_NAME=1; shift 2 ;;
+        -p|--prefix)   PREFIX="${2:-}"; CLI_PREFIX=1; shift 2 ;;
         -m|--max)      MAX_INDEX="${2:-}"; shift 2 ;;
         -d|--delete)   EXTRA_DELETE+=("${2:-}"); shift 2 ;;
         -k|--keep-user-keys) KEEP_USER_KEYS=1; shift ;;
@@ -202,8 +219,17 @@ fi
 
 # --- Work out the clone name -----------------------------------------
 
-if [ -n "$CLONE_NAME" ] && [ -n "$PREFIX" ]; then
+if [ "$CLI_NAME" -eq 1 ] && [ "$CLI_PREFIX" -eq 1 ]; then
     die "use either --name or --prefix, not both"
+fi
+
+# A name or prefix typed on the command line replaces the other one
+# from the config file, so a saved PREFIX never blocks a one-off -n.
+[ "$CLI_NAME" -eq 1 ] && PREFIX=""
+[ "$CLI_PREFIX" -eq 1 ] && CLONE_NAME=""
+
+if [ -n "$CLONE_NAME" ] && [ -n "$PREFIX" ]; then
+    die "the config file sets both CLONE_NAME and PREFIX; keep only one"
 fi
 
 if [ -n "$CLONE_NAME" ]; then
@@ -249,7 +275,8 @@ fi
 echo
 
 if [ "$ASSUME_YES" -eq 0 ] && [ "$DRY_RUN" -eq 0 ]; then
-    read -r -p "Proceed? [y/N] " answer
+    # No terminal to answer (cron, a pipe): treat it as a no, not a crash.
+    read -r -p "Proceed? [y/N] " answer || answer=""
     case "$answer" in
         [yY]|[yY][eE][sS]) ;;
         *) echo "Cancelled."; exit 0 ;;
