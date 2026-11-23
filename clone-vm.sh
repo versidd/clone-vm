@@ -1,18 +1,4 @@
 #!/usr/bin/env bash
-#
-# clone-vm.sh — Clone a KVM/QEMU virtual machine and reset its identity.
-#
-# Cloning a VM with virt-clone alone copies /etc/machine-id and the SSH
-# host keys. Two clones then look like the same machine: DHCP hands them
-# the same lease, SSH warns about changed host keys, and inventory agents
-# report under one identity. This script runs virt-sysprep after the
-# clone so every copy starts with its own identity and hostname.
-#
-# Requires: virt-clone (virtinst), virt-sysprep (libguestfs-tools), root.
-# The template VM must be SHUT OFF before cloning.
-#
-# License: MIT
-#
 
 set -euo pipefail
 
