@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="978" height="450" viewBox="0 0 978 450" role="img" aria-label="clone-vm.sh --dry-run">
+  <title>clone-vm.sh --dry-run</title>
+  <rect width="978" height="450" rx="10" fill="#0d1117"/>
+  <path d="M0 10a10 10 0 0 1 10-10h958a10 10 0 0 1 10 10v24H0z" fill="#161b22"/>
+  <circle cx="20" cy="17" r="6" fill="#ff5f57"/>
+  <circle cx="40" cy="17" r="6" fill="#febc2e"/>
+  <circle cx="60" cy="17" r="6" fill="#28c840"/>
+  <text x="489" y="21" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="12">clone-vm.sh --dry-run</text>
+  <g font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace" font-size="13">
+    <text x="20" y="52"><tspan fill="#3fb950">$&#160;</tspan><tspan fill="#e6edf3">sudo&#160;./clone-vm.sh&#160;-t&#160;debian-template&#160;-p&#160;client&#160;\</tspan></text>
+    <text x="20" y="71" fill="#e6edf3">&#160;&#160;&#160;&#160;-d&#160;'/var/lib/glpi-agent/*'&#160;-c&#160;'glpi-agent&#160;--force'&#160;--dry-run</text>
+    <text x="20" y="109" fill="#e6edf3">&#160;&#160;Template&#160;:&#160;debian-template</text>
+    <text x="20" y="128" fill="#e6edf3">&#160;&#160;Clone&#160;&#160;&#160;&#160;:&#160;client3</text>
+    <text x="20" y="147" fill="#e6edf3">&#160;&#160;Sysprep&#160;&#160;:&#160;yes</text>
+    <text x="20" y="166" fill="#e6edf3">&#160;&#160;Start&#160;&#160;&#160;&#160;:&#160;yes</text>
+    <text x="20" y="185" fill="#e6edf3">&#160;&#160;On&#160;boot&#160;&#160;:</text>
+    <text x="20" y="204" fill="#e6edf3">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;glpi-agent&#160;--force</text>
+    <text x="20" y="223" fill="#e6edf3">&#160;&#160;Delete&#160;&#160;&#160;:&#160;/var/lib/glpi-agent/*</text>
+    <text x="20" y="242" fill="#e6edf3">&#160;&#160;Mode&#160;&#160;&#160;&#160;&#160;:&#160;dry&#160;run,&#160;nothing&#160;will&#160;change</text>
+    <text x="20" y="280" fill="#e6edf3">==&gt;&#160;Cloning&#160;'debian-template'&#160;into&#160;'client3'</text>
+    <text x="20" y="299" fill="#e6edf3">&#160;&#160;&#160;[dry-run]&#160;virt-clone&#160;--original&#160;debian-template&#160;--name&#160;client3&#160;--auto-clone</text>
+    <text x="20" y="318" fill="#e6edf3">==&gt;&#160;Resetting&#160;identity&#160;(machine-id,&#160;SSH&#160;host&#160;keys,&#160;hostname,&#160;logs)</text>
+    <text x="20" y="337" fill="#e6edf3">&#160;&#160;&#160;[dry-run]&#160;virt-sysprep&#160;-d&#160;client3&#160;--hostname&#160;client3&#160;--firstboot&#160;/tmp/tmp.03PrFy847D&#160;--delete&#160;/var/lib/glpi-agent/\*</text>
+    <text x="20" y="356" fill="#e6edf3">==&gt;&#160;Starting&#160;'client3'</text>
+    <text x="20" y="375" fill="#e6edf3">&#160;&#160;&#160;[dry-run]&#160;virsh&#160;start&#160;client3</text>
+    <text x="20" y="413" fill="#e6edf3">Dry&#160;run&#160;finished:&#160;nothing&#160;was&#160;changed.</text>
+  </g>
+</svg>
