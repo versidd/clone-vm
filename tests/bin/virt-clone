@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "CLONE $*" >> "$FAKE_LOG"
+while [ $# -gt 0 ]; do [ "$1" = "--name" ] && name="$2"; shift; done
+echo "$name shut off" >> "$FAKE_STATE"

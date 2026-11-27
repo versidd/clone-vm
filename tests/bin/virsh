@@ -1,0 +1,23 @@
+#!/bin/bash
+# Fake virsh for the test suite, driven by a state file.
+# Like the real one, it translates the states it prints when the locale
+# is French (LC_ALL wins over LC_MESSAGES, which wins over LANG).
+cmd="$1"; shift
+locale="${LC_ALL:-${LC_MESSAGES:-${LANG:-}}}"
+tr_state() {
+  case "$locale" in
+    fr*) case "$1" in
+           "shut off") echo "fermé" ;;
+           running)    echo "en cours d'exécution" ;;
+           *)          echo "$1" ;;
+         esac ;;
+    *)   echo "$1" ;;
+  esac
+}
+case "$cmd" in
+  dominfo)  grep -q "^$1 " "$FAKE_STATE" ;;
+  domstate) tr_state "$(awk -v n="$1" '$1==n{$1="";sub(/^ /,"");print}' "$FAKE_STATE")" ;;
+  list)     echo " Name   State"; cat "$FAKE_STATE" ;;
+  start)    echo "START $1" >> "$FAKE_LOG"; sed -i "s/^$1 .*/$1 running/" "$FAKE_STATE" ;;
+  *)        echo "VIRSH $cmd $*" >> "$FAKE_LOG" ;;
+esac

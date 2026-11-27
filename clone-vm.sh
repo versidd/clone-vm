@@ -16,7 +16,7 @@
 
 set -euo pipefail
 
-VERSION="1.2.2"
+VERSION="1.2.3"
 
 # ---------------------------------------------------------------------
 # Defaults — override on the command line or in the config file below.
@@ -210,9 +210,11 @@ if ! virsh dominfo "$TEMPLATE" >/dev/null 2>&1; then
     exit 1
 fi
 
-STATE=$(virsh domstate "$TEMPLATE")
+# virsh translates the state it prints ("fermé" on a French system), so
+# ask for it in English before comparing.
+STATE=$(LC_ALL=C virsh domstate "$TEMPLATE")
 if [ "$STATE" != "shut off" ]; then
-    die "template VM '$TEMPLATE' is '$STATE'. Shut it down first: virsh shutdown $TEMPLATE"
+    die "template VM '$TEMPLATE' is '$STATE'. Shut it down first: sudo virsh shutdown $TEMPLATE"
 fi
 
 [[ "$MAX_INDEX" =~ ^[0-9]+$ ]] || die "--max must be a number"
