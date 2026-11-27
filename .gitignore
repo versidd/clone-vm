@@ -1,0 +1,6 @@
+# files written by tests/run-tests.sh
+tests/state
+tests/log
+tests/firstboot
+tests/sandbox/
+tests/test.conf

@@ -1,0 +1,4 @@
+#!/bin/bash
+printf 'SYSPREP'; printf ' [%s]' "$@"; echo
+{ printf 'SYSPREP'; printf ' [%s]' "$@"; echo; } >> "$FAKE_LOG"
+while [ $# -gt 0 ]; do [ "$1" = "--firstboot" ] && cp "$2" "$FAKE_FB"; shift; done

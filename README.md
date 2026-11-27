@@ -74,6 +74,16 @@ You always tell the script **which VM to clone** with `-t`. The name is the one
 sudo ./clone-vm.sh -t TEMPLATE [-n NAME | -p PREFIX] [options]
 ```
 
+This line describes the syntax, it is not a command to paste. Words in
+CAPITALS are placeholders for your own values, square brackets mark what is
+optional, and `|` means "one or the other". Pasted as is, the shell reads the
+`|` as a pipe and fails with `-p: command not found`. A real command looks like
+this:
+
+```sh
+sudo ./clone-vm.sh -t debian-template -n web-02
+```
+
 ### Naming the clone
 
 You choose the names; nothing is hard-coded.
@@ -227,6 +237,28 @@ sudo ./clone-vm.sh -t debian-template -p client -k
   make sure the storage pool has room for a full copy.
 - If `virt-sysprep` fails with a permission error on `/boot/vmlinuz-*`, run
   `sudo chmod +r /boot/vmlinuz-*` on the host and try again.
+
+## Tests
+
+The test suite replaces `virsh`, `virt-clone` and `virt-sysprep` with small
+fakes, so it runs anywhere without root and without touching a real VM:
+
+```sh
+bash tests/run-tests.sh ./clone-vm.sh
+```
+
+It covers argument checks, naming, the options passed to `virt-clone` and
+`virt-sysprep`, the config file and the first-boot script. Two tests run the
+script under a French locale, where `virsh` prints `fermé` instead of
+`shut off`. The script itself passes `shellcheck` with no warning.
+
+## Changelog
+
+- **1.2.3**: the template state is read with `LC_ALL=C`, so a shut-off
+  template is no longer refused on a non-English system (`virsh` translated
+  `shut off` to `fermé`). The hint to stop a running template now says
+  `sudo virsh shutdown`, since `virsh` without `sudo` does not see system VMs.
+  Test suite published.
 
 ## License
 
